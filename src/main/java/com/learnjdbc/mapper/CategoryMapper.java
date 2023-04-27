@@ -10,11 +10,7 @@ public class CategoryMapper implements RowMapper<CategoryModel>{
         try {
            CategoryModel categoryModel = new CategoryModel();
             categoryModel.setId(resultSet.getLong("id"));
-            categoryModel.setCategoryName(resultSet.getString("categoryName"));
-            categoryModel.setCreateBy(resultSet.getString("createBy"));
-            categoryModel.setCreateDate(resultSet.getTimestamp("createDate"));
-            categoryModel.setUpdateBy(resultSet.getString("updateBy"));
-            categoryModel.setUpdateDate(resultSet.getTimestamp("updateDate"));
+            categoryModel.setName(resultSet.getString("name"));
             return categoryModel;
         } catch (Exception e) {
             e.printStackTrace();

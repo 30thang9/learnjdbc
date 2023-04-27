@@ -24,7 +24,7 @@ public class EditController extends HttpServlet {
         String type=req.getParameter("type");
         if(type!=null){
             ProductModel model= FormUtil.toModel(ProductModel.class,req);
-            model= productService.findOne(model.getId());
+            model= productService.getOne(model.getId());
             req.setAttribute(SystemConstant.PRODUCT,model);
         }
         req.setAttribute("type",type);

@@ -3,8 +3,9 @@ package com.learnjdbc.paging;
 import com.learnjdbc.sort.Sorter;
 
 public interface Page {
-    public int getPage();
-    public int getOffset();
-    public int getLimit();
+    public Integer getPage();
+    public Integer getOffset();
+    public Integer getLimit();
     public Sorter getSorter();
+    public String getSearch();
 }

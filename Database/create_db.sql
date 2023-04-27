@@ -1,119 +1,119 @@
-CREATE DATABASE ogani;
-USE ogani;
-CREATE TABLE roles (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    roleName VARCHAR(50) NOT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+
+create database ogani3;
+use ogani3;
+
+CREATE TABLE User (
+  username VARCHAR(255) PRIMARY KEY,
+  password VARCHAR(255),
+  role INT DEFAULT 0
 );
 
-CREATE TABLE customers (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    customerName VARCHAR(255) NULL,
-    phone VARCHAR(50) NULL,
-    address VARCHAR(1000) NULL,
-    roleId BIGINT NOT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (roleId) REFERENCES roles(id)
+CREATE TABLE Customer (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    phone VARCHAR(20),
+    email VARCHAR(50),
+    username VARCHAR(255),
+    FOREIGN KEY (username) REFERENCES User(username) ON DELETE SET NULL
 );
 
-CREATE TABLE categories (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    categoryName VARCHAR(255) NOT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+CREATE TABLE Employee (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    username VARCHAR(255),
+    FOREIGN KEY (username) REFERENCES User(username) ON DELETE SET NULL
 );
 
-CREATE TABLE suppliers (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    supplierName VARCHAR(255) NOT NULL,
-    address VARCHAR(1000) NULL,
-    phone VARCHAR(50) NULL,
-    email VARCHAR(255) NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+CREATE TABLE Category (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
 );
 
-CREATE TABLE products (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    productName VARCHAR(255) NULL,
-    price DECIMAL(10,2) NULL,
-    discountPrice DECIMAL(10,2) DEFAULT NULL,
-    discountQuantity INT NULL,
-    discountStatus BIT DEFAULT 0,
-    hotStatus BIT DEFAULT 0,
-    sellingStatus BIT DEFAULT 0,
-    descriptions VARCHAR(1000) NULL,
-    weight FLOAT NULL,
-    categoryId BIGINT NOT NULL,
-    supplierId BIGINT NOT NULL,
-    quantityInstock BIGINT NULL,
-    productStatus BIT DEFAULT 0,
-    imageUrl VARCHAR(255) NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (categoryId) REFERENCES categories(id),
-    FOREIGN KEY (supplierId) REFERENCES suppliers(id)
+CREATE TABLE Product (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    importPrice DOUBLE,
+    exportPrice DOUBLE,
+    discountPrice DOUBLE,
+    weight DOUBLE,
+    descriptions VARCHAR(1000),
+    categoryId BIGINT,
+    imageUrl VARCHAR(255),
+    FOREIGN KEY (categoryId) REFERENCES Category(id)
 );
 
-CREATE TABLE productImages (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    imageUrl VARCHAR(255) NOT NULL,
-    productId BIGINT NOT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (productId) REFERENCES products(id)
+CREATE TABLE ProductLot (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    productId BIGINT,
+    productionDate TIMESTAMP,
+    expirationDate TIMESTAMP,
+    quantity INT,
+    FOREIGN KEY (productId) REFERENCES Product(id)
 );
 
-CREATE TABLE orders (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    customerId BIGINT NOT NULL,
-    orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(20) NOT NULL,
-    shippingAddress VARCHAR(1000) NOT NULL,
-    shippingFee DECIMAL(10,2) NOT NULL,
-    totalAmount DECIMAL(10,2) NOT NULL,
-    paymentMethod VARCHAR(50) NOT NULL,
-    paymentStatus VARCHAR(20) NOT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (customerId) REFERENCES customers(id)
+CREATE TABLE ProductImage (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(255),
+    position INT,
+    productId BIGINT,
+    FOREIGN KEY (productId) REFERENCES Product(id)
 );
 
-CREATE TABLE orderDetails (
-    orderId BIGINT NOT NULL,
-    productId BIGINT NOT NULL,
-    priceSell DECIMAL(10,2) NULL,
-    quantity INT NULL,
-    createBy VARCHAR(50) NULL,
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateBy VARCHAR(50) NULL,
-    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (orderId,productId),
-    FOREIGN KEY (orderId) REFERENCES orders(id),
-    FOREIGN KEY (productId) REFERENCES products(id)
+CREATE TABLE Supplier (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    phone VARCHAR(20),
+    email VARCHAR(50)
 );
+
+CREATE TABLE Orders (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  productLotId BIGINT,
+  price DOUBLE,
+  quantity INT,
+  username VARCHAR(255),
+  orderDate TIMESTAMP,
+  status INT DEFAULT 0,
+  FOREIGN KEY (productLotId) REFERENCES ProductLot(id),
+  FOREIGN KEY (username) REFERENCES User(username)
+);
+
+CREATE TABLE Purchase (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    purchaseDate TIMESTAMP,
+    supplierId BIGINT,
+    FOREIGN KEY (supplierId) REFERENCES Supplier(id)
+);
+
+CREATE TABLE PurchaseDetail (
+    purchaseId BIGINT,
+    productLotId BIGINT,
+    quantity INT,
+    PRIMARY KEY (purchaseId, productLotId),
+    FOREIGN KEY (purchaseId) REFERENCES Purchase(id),
+    FOREIGN KEY (productLotId) REFERENCES ProductLot(id)
+);
+
+CREATE TABLE Sale (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    saleDate TIMESTAMP,
+    totalMoney DOUBLE,
+    customerId BIGINT,
+    FOREIGN KEY (customerId) REFERENCES Customer(id)
+);
+
+CREATE TABLE SaleDetail (
+    saleId BIGINT,
+    productLotId BIGINT,
+    quantity INT,
+    paymentPrice DOUBLE,
+    PRIMARY KEY (saleId, productLotId),
+    FOREIGN KEY (saleId) REFERENCES Sale(id),
+    FOREIGN KEY (productLotId) REFERENCES ProductLot(id)
+);
+

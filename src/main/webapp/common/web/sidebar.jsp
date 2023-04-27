@@ -2,6 +2,6 @@
 <%@include file="/common/taglib.jsp" %>
  <ul>
     <c:forEach var="o" items="${category.getListResult()}">
-        <li><a href="#">${o.getCategoryName()}</a></li>
+        <li><a href="<c:url value='/shop?categoryId='/>${o.getId()}">${o.getName()}</a></li>
     </c:forEach>
 </ul>

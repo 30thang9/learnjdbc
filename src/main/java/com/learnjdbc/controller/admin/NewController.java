@@ -24,11 +24,10 @@ public class NewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductModel model= FormUtil.toModel(ProductModel.class,req);
-        Page page=new PageRequest(model.getPage(),model.getPageSize(),new Sorter(model.getSortName(), model.getSortBy()));
-        model.setListResult(productService.getAll(page));
-        model.setTotalPage(productService.getTotalPage(model.getPageSize()));
+        Page page=new PageRequest(model.getPage(),model.getPageSize(),new Sorter(model.getSortName(), model.getSortBy()),model.getSearch());
+        model.setListResult(productService.getByPage(page));
+        model.setTotalPage(productService.getTotalPage(page));
         req.setAttribute(SystemConstant.PRODUCT,model);
-        System.out.println(model.getListResult().get(0).getHotStatus());
         RequestDispatcher requestDispatcher=req.getRequestDispatcher("/views/admin/new/list.jsp");
         requestDispatcher.forward(req,resp);
     }

@@ -33,7 +33,7 @@ Content body start
           <div class="card">
             <div class="card-body">
               <div class="card-title d-flex justify-content-between align-items-center">
-                <h4>Table Product</h4>
+                <h4>List Products</h4>
                 <div class="d-flex justify-content-center align-items-center">
                   <div class="mr-2">
                     <button data-toggle="modal" data-target="#modalAdd" type="button"
@@ -100,6 +100,14 @@ Content body start
                   </div>
                 </div>
               </div>
+              <form class="row g-3 mt-3 mb-3" id="searchForm">
+                <div class="col-md-4">
+                  <input type="text" class="form-control" id="inputSearch" name="search" placeholder="Search...">
+                </div>
+                <div class="col-md-3 pt-1">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </form>
               <div class="table-responsive">
                 <table id="tableProduct" class="table table-striped">
                   <thead>
@@ -108,11 +116,10 @@ Content body start
                       <th>#</th>
                       <th>Name</th>
                       <th>Weight</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>CategoryId</th>
-                      <th>SupplierId</th>
-                      <th></th>
+                      <th>ImportPrice</th>
+                      <th>ExportPrice</th>
+                      <th>Category</th>
+                      <th>Repair</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -130,33 +137,26 @@ Content body start
                           ${o.getId()}
                         </td>
                         <td>
-                          ${o.getProductName()}
+                          ${o.getName()}
                         </td>
                         <td>
                           ${o.getWeight()}
                         </td>
                         <td>
-                          ${o.getPrice()}
+                          ${o.getImportPrice()}
                         </td>
                         <td>
-                          ${o.getQuantityInstock()}
+                          ${o.getExportPrice()}
                         </td>
                         <td>
                           <c:forEach var="c" items="${category.getListResult()}">
                             <c:if test="${o.getCategoryId()==c.getId()}">
-                              ${c.getCategoryName()}
+                              ${c.getName()}
                             </c:if>
                           </c:forEach>
                         </td>
                         <td>
-                          <c:forEach var="c" items="${supplier.getListResult()}">
-                            <c:if test="${o.getSupplierId()==c.getId()}">
-                              ${c.getSupplierName()}
-                            </c:if>
-                          </c:forEach>
-                        </td>
-                        <td>
-                          <button data-toggle="modal" data-target="#modalUpdate" type="button"
+                          <button data-toggle="modal" data-target="#modalUpdate_${o.getId()}" type="button"
                             class="btn btn-outline-danger btn-xs">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                               class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -166,7 +166,7 @@ Content body start
                                 d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                             </svg>
                           </button>
-                          <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog"
+                          <div class="modal fade" id="modalUpdate_${o.getId()}" tabindex="-1" role="dialog"
                             aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
@@ -214,15 +214,43 @@ Content body end
     $(document).on("click", "#modalAdd .btn-primary", function () {
       window.location.href = "<c:url value='/admin-edit'/>";
     });
+
+  </script>
+
+  <script>
+    const form = document.getElementById('searchForm'); // Lấy thẻ form
+    const input = form.querySelector('input[name="search"]'); // Lấy thẻ input với attribute name là "search"
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn submit form
+
+        const searchParam = input.value; // Lấy giá trị của input
+        const searchIndex = window.location.href.indexOf('&search='); // Kiểm tra xem tham số "search" đã tồn tại chưa
+
+        let url = ''; // Khởi tạo biến URL mới
+
+        if (searchIndex > -1) {
+            // Nếu tham số "search" đã tồn tại, thay thế giá trị của nó bằng searchParam
+            url = window.location.href.replace(/&search=[^&]*/, '&search=' + searchParam);
+        } else {
+            // Nếu tham số "search" chưa tồn tại, thêm nó vào URL mới
+            url = window.location.href + '&search=' + searchParam;
+        }
+        url = url.replace(/(\?|&)page=[^&]*(&?)/, '$1page=1$2');
+        window.location.href = url; // Chuyển đến URL mới
+    });
   </script>
 
   <script type="text/javascript">
     var totalPages = ${ product.totalPage };
+    if(totalPages==0){
+        totalPages=1;
+    }
     if (totalPages == 1) {
       document.getElementById("pagination").style.display = "none";
     }
     var currentPage = ${ product.page };
-    var limit = 8;
+    var limit = 5;
     $(function () {
       window.pagObj = $('#pagination').twbsPagination({
         totalPages: totalPages,
@@ -234,6 +262,15 @@ Content body end
             $('#pageSize').val(limit);
             $('#sortName').val('id');
             $('#sortBy').val('desc');
+            if (window.location.href.indexOf('&search=') !== -1) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const searchParam = urlParams.get('search');
+              $('#formSubmit').append($('<input>').attr({
+                type: 'hidden',
+                name: 'search',
+                value: searchParam
+              }));
+            }
             $('#formSubmit').submit();
           }
         }
@@ -244,42 +281,46 @@ Content body end
   </script>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
     function deleteCheckedItems() {
-      const ids = Array.from(document.getElementsByClassName("productCheckBox"))
-        .filter(ch => ch.checked)
-        .map(ch => parseInt(ch.value));
+        const ids = Array.from(document.getElementsByClassName("productCheckBox"))
+            .filter(ch => ch.checked)
+            .map(ch => parseInt(ch.value));
 
-      fetch("<c:url value='/api-admin-new'/>", {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "ids": ids })
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          console.log('Items deleted successfully');
-          window.location.href="<c:url value='admin-new?page=1&pageSize=8&sortName=id&sortBy=desc&deleteId='/>"+ids;
-
-        })
-        .catch(error => {
-          console.error('There was a problem deleting the items:', error);
+        $.ajax({
+            type: "DELETE",
+            url: "<c:url value='/api-admin-new'/>",
+            contentType: "application/json",
+            data: JSON.stringify({ "ids": ids }),
+            success: function(response) {
+                console.log('Items deleted successfully');
+                //var urlParams = new URLSearchParams(window.location.search);
+                //var page = urlParams.get('page');
+                //let a=parseInt(page);
+                // var totalPages = ${(product.totalPage*8-ids.length)/8};
+                //var totalPages = ${product.totalPage};
+                //console.log(totalPages);
+                //let b=parseInt(totalPages);
+                //if(a>b){
+                    //window.location.href="<c:url value='admin-new?page=${product.totalPage}&pageSize=5&sortName=id&sortBy=desc'/>";
+                //}
+                //else{
+                    //window.location.href="<c:url value='admin-new?page=${product.getPage()}&pageSize=5&sortName=id&sortBy=desc'/>";
+                //}
+                window.location.href="<c:url value='admin-new?page=1&pageSize=5&sortName=id&sortBy=desc'/>";
+            },
+            error: function(xhr, status, error) {
+                console.error('There was a problem deleting the items:', error);
+            }
         });
-      //const totalPage=${product.totalPage};
-      //window.location.href="<c:url value='admin-new?page=1&pageSize=8&sortName=id&sortBy=desc&deleteId='/>"+ids;
     }
-    for(var i = 0; i <${product.getListResult().size()};i++){
-        console.log(${product.getListResult().get(i).getId()});
-    }
+
     var deleteButton = document.getElementById("deleteButton");
     deleteButton.onclick = function() {
-      deleteCheckedItems();
+        deleteCheckedItems();
     };
+</script>
 
-  </script>
 
 
 </body>

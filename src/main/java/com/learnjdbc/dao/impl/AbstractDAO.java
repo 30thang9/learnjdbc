@@ -13,7 +13,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
     public Connection getConnection(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url="jdbc:mysql://localhost:3306/ogani?useSSL=false";
+            String url="jdbc:mysql://localhost:3306/ogani3?useSSL=false";
             String user="root";
             String passWord="123456";
             return DriverManager.getConnection(url,user,passWord);
@@ -55,7 +55,39 @@ public class AbstractDAO<T> implements GenericDAO<T> {
     }
 
     @Override
-    public Long insert(String query, Object... parameter) {
+    public boolean execute(String query, Object... parameter) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(query);
+            setParameter(preparedStatement, parameter);
+            int result = preparedStatement.executeUpdate();
+            connection.commit();
+            return result > 0;
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+            return false;
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public Long insertGetId(String query, Object... parameter) {
         Connection connection=null;
         PreparedStatement preparedStatement=null;
         ResultSet resultSet=null;
@@ -97,53 +129,21 @@ public class AbstractDAO<T> implements GenericDAO<T> {
     }
 
     @Override
-    public void update(String query, Object... parameter) {
-        Connection connection=null;
-        PreparedStatement preparedStatement=null;
-        try {
-            connection=getConnection();
-            connection.setAutoCommit(false);
-            preparedStatement=connection.prepareStatement(query);
-            setParameter(preparedStatement,parameter);
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-        } finally {
-            try {
-                if(connection!=null){
-                    connection.close();
-                }
-                if(preparedStatement!=null){
-                    preparedStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public int count(String query, Object... parameter) {
-        Connection connection=null;
-        PreparedStatement preparedStatement=null;
-        ResultSet resultSet=null;
+    public int count(String query, Object... parameters) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         int count = 0;
         try {
-            connection=getConnection();
-            preparedStatement=connection.prepareStatement(query);
-            setParameter(preparedStatement,parameter);
-            resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                count=resultSet.getInt(1);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(query);
+            setParameter(preparedStatement, parameters);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
             }
-            return count;
-        } catch (Exception e) {
-            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             try {
                 if(connection!=null){
@@ -151,14 +151,14 @@ public class AbstractDAO<T> implements GenericDAO<T> {
                 }
                 if(preparedStatement!=null){
                     preparedStatement.close();
-                }
-                if(resultSet!=null){
+                }if(resultSet!=null){
                     resultSet.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        return count;
     }
 
     public void setParameter(PreparedStatement preparedStatement, Object... parameters) {

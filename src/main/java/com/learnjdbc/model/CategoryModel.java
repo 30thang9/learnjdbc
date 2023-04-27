@@ -3,12 +3,20 @@ package com.learnjdbc.model;
 
 
 public class CategoryModel extends AbstractModel<CategoryModel> {
-    private String categoryName;
-    public String getCategoryName() {
-        return categoryName;
+    private long id;
+    private String name;
+
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

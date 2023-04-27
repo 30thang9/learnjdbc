@@ -27,9 +27,9 @@ public class DbFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         CategoryModel categoryModel = new CategoryModel();
-        categoryModel.setListResult(categoryService.findAll());
+        categoryModel.setListResult(categoryService.getAll());
         SupplierModel supplierModel=new SupplierModel();
-        supplierModel.setListResult(supplierService.findAll());
+        supplierModel.setListResult(supplierService.getAll());
         if(!req.getRequestURI().startsWith("/api")){
             req.setAttribute(SystemConstant.CATEGORY, categoryModel);
             req.setAttribute(SystemConstant.SUPPLIER,supplierModel);

@@ -11,14 +11,10 @@ public class SupplierMapper implements RowMapper<SupplierModel>{
         try {
             SupplierModel supplierModel = new SupplierModel();
             supplierModel.setId(resultSet.getLong("id"));
-            supplierModel.setSupplierName(resultSet.getString("supplierName"));
+            supplierModel.setName(resultSet.getString("name"));
             supplierModel.setAddress(resultSet.getString("address"));
             supplierModel.setPhone(resultSet.getString("phone"));
             supplierModel.setEmail(resultSet.getString("email"));
-            supplierModel.setCreateBy(resultSet.getString("createBy"));
-            supplierModel.setCreateDate(resultSet.getTimestamp("createDate"));
-            supplierModel.setUpdateBy(resultSet.getString("updateBy"));
-            supplierModel.setUpdateDate(resultSet.getTimestamp("updateDate"));
             return supplierModel;
         } catch (Exception e) {
             e.printStackTrace();

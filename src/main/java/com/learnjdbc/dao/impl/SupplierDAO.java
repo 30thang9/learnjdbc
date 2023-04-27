@@ -1,10 +1,7 @@
 package com.learnjdbc.dao.impl;
 
-import com.learnjdbc.dao.ICategoryDAO;
 import com.learnjdbc.dao.ISupplierDAO;
-import com.learnjdbc.mapper.CategoryMapper;
 import com.learnjdbc.mapper.SupplierMapper;
-import com.learnjdbc.model.CategoryModel;
 import com.learnjdbc.model.SupplierModel;
 
 import java.sql.Timestamp;
@@ -12,38 +9,36 @@ import java.util.List;
 
 public class SupplierDAO extends AbstractDAO<SupplierModel> implements ISupplierDAO {
     @Override
-    public Long save(SupplierModel supplierModel) {
-        String query="INSERT INTO suppliers (supplierName,address,phone,email, createBy, updateBy) " +
-                "VALUES (?, ?, ?)";
-        return insert(query,supplierModel.getSupplierName(),supplierModel.getAddress(),supplierModel.getPhone(),
-                supplierModel.getEmail(),supplierModel.getCreateBy(),supplierModel.getUpdateBy());
+    public boolean save(SupplierModel supplierModel) {
+        String query="INSERT INTO Supplier (name,address,phone,email) " +
+                "VALUES (?, ?, ?, ?)";
+        return execute(query,supplierModel.getName(),supplierModel.getAddress(),supplierModel.getPhone(),
+                supplierModel.getEmail());
     }
 
     @Override
-    public SupplierModel findOne(Long id) {
-        String sql = "select * from suppliers where id = ? ";
+    public SupplierModel getOne(long id) {
+        String sql = "select * from Supplier where id = ? ";
         List<SupplierModel> supplierModel=query(sql,new SupplierMapper(),id);
         return supplierModel.isEmpty()? null: supplierModel.get(0);
     }
 
     @Override
-    public void update(SupplierModel supplierModel) {
-        String query="update suppliers set supplierName=?,address=?,phone=?,email=?,createBy=?," +
-                "updateBy=?, updateDate=? where id=?";
-        update(query,supplierModel.getSupplierName(),supplierModel.getAddress(),supplierModel.getPhone(),
-                supplierModel.getEmail(),supplierModel.getCreateBy(),supplierModel.getUpdateBy(),
-                new Timestamp(System.currentTimeMillis()),supplierModel.getId());
+    public boolean update(SupplierModel supplierModel) {
+        String query="update Supplier set name=?,address=?,phone=?,email=? where id=?";
+        return execute(query, supplierModel.getName(),supplierModel.getAddress(),supplierModel.getPhone(),
+                supplierModel.getEmail(), supplierModel.getId());
     }
 
     @Override
-    public void delete(long id) {
-        String query="delete from suppliers where id=?";
-        update(query,id);
+    public boolean delete(long id) {
+        String query="delete from Supplier where id=?";
+        return execute(query,id);
     }
 
     @Override
-    public List<SupplierModel> findAll() {
-        String sql = "select * from suppliers order by supplierName asc";
+    public List<SupplierModel> getAll() {
+        String sql = "select * from Supplier order by name asc";
         return query(sql,new SupplierMapper());
     }
 

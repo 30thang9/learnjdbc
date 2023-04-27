@@ -5,60 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractModel<T> {
-
-    private long id;
-    private String createBy;
-    private Timestamp createDate;
-    private String updateBy;
-    private Timestamp updateDate;
     private long[] ids;
-
     private List<T> listResult =new ArrayList<>();
-    private int page;
-    private int pageSize;
-    private int totalPage;
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalPage;
     private String sortName;
     private String sortBy;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public Timestamp getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public Timestamp getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Timestamp updateDate) {
-        this.updateDate = updateDate;
-    }
+    private String search;
 
     public long[] getIds() {
         return ids;
@@ -76,27 +30,27 @@ public class AbstractModel<T> {
         this.listResult = listResult;
     }
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
-    public int getTotalPage() {
+    public Integer getTotalPage() {
         return totalPage;
     }
 
-    public void setTotalPage(int totalPage) {
+    public void setTotalPage(Integer totalPage) {
         this.totalPage = totalPage;
     }
 
@@ -114,6 +68,14 @@ public class AbstractModel<T> {
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }
 

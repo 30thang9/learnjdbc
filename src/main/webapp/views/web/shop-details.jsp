@@ -19,11 +19,17 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Vegetable’s Package</h2>
+                        <h2>${product.getName()}</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.html">Home</a>
-                            <a href="./index.html">Vegetables</a>
-                            <span>Vegetable’s Package</span>
+                            <a href="./index.html">
+                                <c:forEach var="c" items="${category.getListResult()}">
+                                    <c:if test="${product.getCategoryId()==c.getId()}">
+                                      ${c.getName()}
+                                    </c:if>
+                                </c:forEach>
+                            </a>
+                            <span>${product.getName()}</span>
                         </div>
                     </div>
                 </div>
@@ -35,28 +41,26 @@
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
         <div class="container">
-            <div class="row">
+            <div class="row w-100">
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
-                            <img class="product__details__pic__item--large"
-                                src="<c:url value='/template/web/img/product/details/product-details-1.jpg'/>" alt="">
+                            <img class="product__details__pic__item--large" style="background-color:#F8F4EA"
+                                src="<c:url value='/template/web/img/product/'/>${product.getImageUrl()}" alt="">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
-                            <img data-imgbigurl="<c:url value='/template/web/img/product/details/product-details-2.jpg'/>"
-                                src="<c:url value='/template/web/img/product/details/thumb-1.jpg'/>" alt="">
-                            <img data-imgbigurl="<c:url value='/template/web/img/product/details/product-details-3.jpg'/>"
-                                src="<c:url value='/template/web/img/product/details/thumb-2.jpg'/>" alt="">
-                            <img data-imgbigurl="<c:url value='/template/web/img/product/details/product-details-5.jpg'/>"
-                                src="<c:url value='/template/web/img/product/details/thumb-3.jpg'/>" alt="">
-                            <img data-imgbigurl="<c:url value='/template/web/img/product/details/product-details-4.jpg'/>"
-                                src="<c:url value='/template/web/img/product/details/thumb-4.jpg'/>" alt="">
+                            <c:forEach var="c" items="${productImage.getListResult()}">
+                                <img style="background-color:#F8F4EA" data-imgbigurl="<c:url value='/template/web/img/product/'/>${c.getUrl()}"
+                                    src="<c:url value='/template/web/img/product/'/>${c.getUrl()}" alt="">
+                            </c:forEach>
+                            <img style="background-color:#F8F4EA" data-imgbigurl="<c:url value='/template/web/img/product/'/>${product.getImageUrl()}"
+                                src="<c:url value='/template/web/img/product/'/>${product.getImageUrl()}" alt="">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>Vetgetable’s Package</h3>
+                        <h3>${product.getName()}</h3>
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -65,23 +69,101 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
-                        <div class="product__details__price">$50.00</div>
-                        <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                            vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
-                            quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
+                        <div class="product__details__price">
+                         <c:set var="disS" value="0.00" />
+                         <c:forEach var="c" items="${productLot.getListResult()}" varStatus="loop">
+                             <c:choose>
+                                <c:when test="${loop.index == 0}">
+                                    <c:set var="disS" value="${disS + 0.00}" />
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="disS" value="${disS + 0.05}" />
+                                </c:otherwise>
+                             </c:choose>
+                         </c:forEach>
+                         (${product.getExportPrice() - (product.getExportPrice() * disS)}
+                         - ${product.getExportPrice()})
+                         </div>
+                        <p style="margin-bottom:15px">${product.getDescriptions()}</p>
+                        <form method="post" action="<c:url value='/add-to-cart'/>">
+                            <div class="row w-100">
+                              <select class="ml-3 form-select" name="productLotId" onchange="updatePrice()" required>
+                                  <option disabled selected value="">--Choose--</option>
+                                  <c:set var="discount" value="0.05" />
+                                  <c:forEach var="c" items="${productLot.getListResult()}" varStatus="loop">
+                                        <c:set var="price" value="${product.getExportPrice()}" />
+                                        <c:choose>
+                                            <c:when test="${loop.index == 0}">
+                                                <option data-price="${price}" value="${c.getId()}">Commodity ${loop.index + 1} - ${price} - ${c.getQuantity()}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option data-price="${price - (discount * price)}" value="${c.getId()}">Commodity ${loop.index + 1} - ${price - (discount * price)} - ${c.getQuantity()}</option>
+                                                <c:set var="discount" value="${discount + 0.05}" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                  </c:forEach>
+                              </select>
+                            </div>
+                            <br/>
+                            <input type="hidden" value="${product.getExportPrice()}" name="price"/>
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="number" value="1" name="quantity" readonly>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
+                            <button type="submit" class="primary-btn" id="add-to-cart-btn">ADD TO CARD</button>
+                        </form>
+
+                        <script>
+                          function updatePrice() {
+                            const selectElement = document.querySelector('[name="productLotId"]');
+                            const priceInput = document.querySelector('[name="price"]');
+                            const selectedOption = selectElement.options[selectElement.selectedIndex];
+                            const selectedPrice = selectedOption.getAttribute('data-price');
+                            priceInput.value = selectedPrice;
+                          }
+                        </script>
+
+                        <!--start-script-->
+                        <c:choose>
+                          <c:when test="${productLot != null && productLot.getListResult() != null && not empty productLot.getListResult()}">
+                            <!-- Nếu productLot không rỗng thì không làm gì cả -->
+                          </c:when>
+                          <c:otherwise>
+                            <script>
+                              // Lấy đối tượng nút "ADD TO CARD" bằng ID
+                              var btn = document.getElementById("add-to-cart-btn");
+
+                              // Vô hiệu hóa nút bằng cách gán thuộc tính onclick và sử dụng phương thức preventDefault
+                              btn.onclick = function(event) {
+                                  event.preventDefault();
+                              };
+
+                              // Thêm lớp CSS "disabled" để trình bày rõ ràng hơn cho người dùng
+                              btn.classList.add("disabled");
+
+                              // Thêm CSS để làm mờ nút và ngăn chặn người dùng click vào nó
+                                btn.style.opacity = "0.5";
+                                btn.style.pointerEvents = "none";
+                            </script>
+                          </c:otherwise>
+                        </c:choose>
+                        <!--end-script-->
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
-                            <li><b>Availability</b> <span>In Stock</span></li>
-                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                            <li><b>Weight</b> <span>0.5 kg</span></li>
+                            <c:choose>
+                                  <c:when test="${productLot != null && productLot.getListResult() != null && not empty productLot.getListResult()}">
+                                     <li><b>Availability</b> <span>In Stock</span></li>
+                                  </c:when>
+                                  <c:otherwise>
+                                     <li><b>Availability</b> <span>Out Stock</span></li>
+                                  </c:otherwise>
+                            </c:choose>
+                            <!--<li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>-->
+                            <li><b>Weight</b> <span>${product.getWeight()} kg</span></li>
                             <li><b>Share on</b>
                                 <div class="share">
                                     <a href="#"><i class="fa fa-facebook"></i></a>

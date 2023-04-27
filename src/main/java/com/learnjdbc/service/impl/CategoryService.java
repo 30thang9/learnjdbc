@@ -1,9 +1,7 @@
 package com.learnjdbc.service.impl;
 
 import com.learnjdbc.dao.ICategoryDAO;
-import com.learnjdbc.dao.impl.CategoryDAO;
 import com.learnjdbc.model.CategoryModel;
-import com.learnjdbc.model.ProductModel;
 import com.learnjdbc.service.ICategoryService;
 
 import javax.inject.Inject;
@@ -15,27 +13,28 @@ public class CategoryService implements ICategoryService {
     private ICategoryDAO categoryDAO;
 
     @Override
-    public CategoryModel save(CategoryModel categoryModel) {
-        Long id= categoryDAO.save(categoryModel);
-        return categoryDAO.findOne(id);
+    public boolean save(CategoryModel categoryModel) {
+        return categoryDAO.save(categoryModel);
     }
 
     @Override
-    public CategoryModel update(CategoryModel categoryModel) {
-        categoryDAO.update(categoryModel);
-        Long id= (long) categoryModel.getId();
-        return categoryDAO.findOne(id);
+    public boolean update(CategoryModel categoryModel) {
+        return categoryDAO.update(categoryModel);
     }
 
     @Override
-    public void delete(long[] ids) {
-        for (long id:ids) {
-            categoryDAO.delete(id);
+    public boolean delete(long[] ids) {
+        boolean isDeleted = true;
+        for (long id : ids) {
+            if (!categoryDAO.delete(id)) {
+                isDeleted = false;
+            }
         }
+        return isDeleted;
     }
 
     @Override
-    public List<CategoryModel> findAll() {
-        return categoryDAO.findAll();
+    public List<CategoryModel> getAll() {
+        return categoryDAO.getAll();
     }
 }

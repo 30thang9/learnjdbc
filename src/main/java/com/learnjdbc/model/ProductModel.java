@@ -1,77 +1,63 @@
 package com.learnjdbc.model;
 
-import java.math.BigDecimal;
 
 public class ProductModel extends AbstractModel<ProductModel>{
-    private String productName;
-    private BigDecimal price;
-    private BigDecimal discountPrice;
-    private int discountQuantity;
-    private Boolean discountStatus;
-    private Boolean hotStatus;
-    private Boolean sellingStatus;
+    private long id;
+    private String name;
+    private double importPrice;
+    private  double exportPrice;
+    private double discountPrice;
+    private double weight;
     private String descriptions;
-    private Float weight;
     private long categoryId;
-    private long supplierId;
-    private long quantityInstock;
-    private Boolean productStatus;
     private String imageUrl;
 
-    public String getProductName() {
-        return productName;
+    public long getId() {
+        return id;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public BigDecimal getDiscountPrice() {
+    public double getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(double importPrice) {
+        this.importPrice = importPrice;
+    }
+
+    public double getExportPrice() {
+        return exportPrice;
+    }
+
+    public void setExportPrice(double exportPrice) {
+        this.exportPrice = exportPrice;
+    }
+
+    public double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(BigDecimal discountPrice) {
+    public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
     }
 
-    public int getDiscountQuantity() {
-        return discountQuantity;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setDiscountQuantity(int discountQuantity) {
-        this.discountQuantity = discountQuantity;
-    }
-
-    public Boolean getDiscountStatus() {
-        return discountStatus;
-    }
-
-    public void setDiscountStatus(Boolean discountStatus) {
-        this.discountStatus = discountStatus;
-    }
-
-    public Boolean getHotStatus() {
-        return hotStatus;
-    }
-
-    public void setHotStatus(Boolean hotStatus) {
-        this.hotStatus = hotStatus;
-    }
-
-    public Boolean getSellingStatus() {
-        return sellingStatus;
-    }
-
-    public void setSellingStatus(Boolean sellingStatus) {
-        this.sellingStatus = sellingStatus;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public String getDescriptions() {
@@ -82,44 +68,12 @@ public class ProductModel extends AbstractModel<ProductModel>{
         this.descriptions = descriptions;
     }
 
-    public Float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Float weight) {
-        this.weight = weight;
-    }
-
     public long getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(long supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public long getQuantityInstock() {
-        return quantityInstock;
-    }
-
-    public void setQuantityInstock(long quantityInstock) {
-        this.quantityInstock = quantityInstock;
-    }
-
-    public Boolean getProductStatus() {
-        return productStatus;
-    }
-
-    public void setProductStatus(Boolean productStatus) {
-        this.productStatus = productStatus;
     }
 
     public String getImageUrl() {
@@ -129,5 +83,4 @@ public class ProductModel extends AbstractModel<ProductModel>{
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
 }

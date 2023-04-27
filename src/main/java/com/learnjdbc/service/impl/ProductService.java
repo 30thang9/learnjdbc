@@ -13,47 +13,59 @@ public class ProductService implements IProductService{
     @Inject
     private IProductDAO productDAO;
     @Override
-    public List<ProductModel> findByCategoryId(Long categoryId) {
-        return productDAO.findByCategoryId(categoryId);
+    public List<ProductModel> getByCategoryId(long categoryId) {
+        return productDAO.getByCategoryId(categoryId);
     }
 
     @Override
-    public ProductModel save(ProductModel productModel) {
-        Long id= productDAO.save(productModel);
-        return productDAO.findOne(id);
+    public boolean save(ProductModel productModel) {
+        return productDAO.save(productModel);
     }
 
     @Override
-    public ProductModel update(ProductModel productModel) {
-        productDAO.update(productModel);
-        Long id= (long) productModel.getId();
-        return productDAO.findOne(id);
+    public long saveGetId(ProductModel productModel) {
+        return productDAO.saveGetId(productModel);
     }
 
     @Override
-    public void delete(long[] ids) {
-        for (long id:ids) {
-            productDAO.delete(id);
+    public boolean update(ProductModel productModel) {
+        return productDAO.update(productModel);
+    }
+
+    @Override
+    public boolean delete(long[] ids) {
+        boolean isDeleted = true;
+        for (long id : ids) {
+            if (!productDAO.delete(id)) {
+                isDeleted = false;
+            }
         }
+        return isDeleted;
+    }
+
+
+    @Override
+    public List<ProductModel> getByPage(Page page) {
+        return productDAO.getByPage(page);
     }
 
     @Override
-    public List<ProductModel> getAll(Page page) {
-        return productDAO.findAll(page);
+    public int getTotalPage(Page page) {
+        return productDAO.getTotalPage(page);
     }
 
     @Override
-    public int getTotalPage(int pageSize) {
-        return productDAO.getTotalPage(pageSize);
-    }
-
-    @Override
-    public ProductModel findOne(long id) {
-        return productDAO.findOne(id);
+    public ProductModel getOne(long id) {
+        return productDAO.getOne(id);
     }
 
     @Override
     public List<ProductModel> getAll() {
         return productDAO.getAll();
+    }
+
+    @Override
+    public List<ProductModel> getBySearch(String search) {
+        return productDAO.getBySearch(search);
     }
 }

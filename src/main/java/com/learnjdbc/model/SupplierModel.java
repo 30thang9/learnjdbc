@@ -3,11 +3,19 @@ package com.learnjdbc.model;
 
 
 public class SupplierModel extends AbstractModel<SupplierModel> {
-    private String supplierName;
+    private long id;
+    private String name;
     private String address;
     private String phone;
     private String email;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
     public String getAddress() {
         return address;
     }
@@ -32,10 +40,10 @@ public class SupplierModel extends AbstractModel<SupplierModel> {
         this.email = email;
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getName() {
+        return name;
     }
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

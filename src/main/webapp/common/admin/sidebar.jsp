@@ -11,38 +11,39 @@
             </li>
             <!--start simple-->
             <li>
-                <a href="<c:url value='/admin-new?page=1&pageSize=8&sortName=id&sortBy=desc'/>" aria-expanded="false">
+                <a href="<c:url value='/admin-new?page=1&pageSize=5&sortName=id&sortBy=desc'/>" aria-expanded="false">
                     <i class="icon-badge menu-icon"></i><span class="nav-text">Products</span>
                 </a>
             </li>
              <!--end simple-->
             <li class="mega-menu mega-menu-sm">
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
+                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Statistical</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="./layout-blank.html">Blank</a></li>
-                    <li><a href="./layout-one-column.html">One Column</a></li>
+                    <li><a href="./layout-blank.html">Product</a></li>
+                    <li><a href="./layout-one-column.html">Customer</a></li>
+                    <li><a href="./layout-two-column.html">Revenue</a></li>
+                    <!--
                     <li><a href="./layout-two-column.html">Two column</a></li>
                     <li><a href="./layout-compact-nav.html">Compact Nav</a></li>
                     <li><a href="./layout-vertical.html">Vertical</a></li>
                     <li><a href="./layout-horizontal.html">Horizontal</a></li>
                     <li><a href="./layout-boxed.html">Boxed</a></li>
                     <li><a href="./layout-wide.html">Wide</a></li>
-
-
                     <li><a href="./layout-fixed-header.html">Fixed Header</a></li>
                     <li><a href="layout-fixed-sidebar.html">Fixed Sidebar</a></li>
+                    -->
                 </ul>
             </li>
             <li>
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-envelope menu-icon"></i> <span class="nav-text">Email</span>
+                    <i class="icon-menu menu-icon"></i><span class="nav-text">Invoice Management</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="./email-inbox.html">Inbox</a></li>
-                    <li><a href="./email-read.html">Read</a></li>
-                    <li><a href="./email-compose.html">Compose</a></li>
+                    <li><a href="./email-inbox.html">Order</a></li>
+                    <li><a href="<c:url value='/admin-management-sale'/>">Sale</a></li>
+                    <li><a href="./email-compose.html">Purchase</a></li>
                 </ul>
             </li>
             <li>

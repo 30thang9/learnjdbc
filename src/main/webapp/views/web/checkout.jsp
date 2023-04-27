@@ -42,123 +42,104 @@
             </div>
             <div class="checkout__form">
                 <h4>Billing Details</h4>
-                <form action="#">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country/State<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc">
-                                    Create an account?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <p>Create an account by entering the information below. If you are a returning customer
-                                please login at the top of the page</p>
-                            <div class="checkout__input">
-                                <p>Account Password<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="diff-acc">
-                                    Ship to a different address?
-                                    <input type="checkbox" id="diff-acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
-                                <ul>
-                                    <li>Vegetable’s Package <span>$75.99</span></li>
-                                    <li>Fresh Vegetable <span>$151.99</span></li>
-                                    <li>Organic Bananas <span>$53.99</span></li>
-                                </ul>
-                                <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                                <div class="checkout__order__total">Total <span>$750.99</span></div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-or">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                                    ut labore et dolore magna aliqua.</p>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
-                            </div>
-                        </div>
+                <form action="<c:url value='/cart-checkout'/>" method="post">
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                      <div class="checkout__input">
+                        <label for="full-name">Full Name<span>*</span></label>
+                        <input type="text" id="full-name" name="customerName" placeholder="Full Name"
+                            value="${sessionScope.customer != null ? sessionScope.customer.getName() : ''}"
+                            required>
+                      </div>
+                      <div class="checkout__input">
+                        <label for="address">Address<span>*</span></label>
+                        <input type="text" id="address" name="address" placeholder="Address"
+                            value="${sessionScope.customer != null ? sessionScope.customer.getAddress() : ''}"
+                            class="checkout__input__add" required>
+                      </div>
+                      <div class="checkout__input">
+                        <label for="phone">Phone<span>*</span></label>
+                        <input type="tel" id="phone" name="phone" placeholder="Phone"
+                            value="${sessionScope.customer != null ? sessionScope.customer.getPhone() : ''}"
+                            required>
+                      </div>
+                      <div class="checkout__input">
+                        <label for="email">Email<span>*</span></label>
+                        <input type="email" id="email" name="email" placeholder="Email"
+                            value="${sessionScope.customer != null ? sessionScope.customer.getEmail() : ''}"
+                            required>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 mb-4"><a class="site-btn" href="<c:url value='/shop'/>">Shopping</a></div>
+                        <div class="col-4 mb-4"><a class="site-btn" href="<c:url value='/shopping-cart'/>">Back to Cart</a></div>
+                      </div>
                     </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="checkout__order">
+                        <h4>Your Order</h4>
+                        <div class="row checkout__order__products">
+                          <div class="col-4">Products</div>
+                          <div class="col-4">Quantity</div>
+                          <div class="col-4">Total</div>
+                        </div>
+                        <div class="row">
+                            <c:forEach items="${sessionScope.cart.getListItems()}" var="item" varStatus="status">
+                              <div class="col-4">
+                                <c:forEach var="c" items="${product.getListResult()}">
+                                    <c:if test="${c.getId()==item.getProductLotModel().getProductId()}">
+                                        ${c.getName()}
+                                    </c:if>
+                                </c:forEach>
+                              </div>
+                              <div class="col-4">
+                                ${item.getQuantity()}
+                              </div>
+                              <div class="col-4">
+                                ${item.getPrice() * item.getQuantity()}
+                              </div>
+                            </c:forEach>
+                        </div>
+                        <div class="checkout__order__subtotal row">
+                            <div class="col-4">Subtotal</div>
+                            <div class="col-4"></div>
+                            <div class="col-4">${sessionScope.cart.getTotalMoney()}</div>
+                        </div>
+                        <div class="checkout__order__total row">
+                            <div class="col-4">Total</div>
+                            <div class="col-4"></div>
+                            <div class="col-4">${sessionScope.cart.getTotalMoney()}</div>
+                        </div>
+                        <!--
+                        <div class="checkout__input__checkbox">
+                          <label for="create-account">
+                            Create an account?
+                            <input type="checkbox" id="create-account" name="create-account">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        -->
+                        <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <div class="checkout__input__checkbox">
+                          <label for="check-payment">
+                            Check Payment
+                            <input type="checkbox" id="check-payment" name="payment-method" value="check">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <div class="checkout__input__checkbox">
+                          <label for="paypal-payment">
+                            Paypal
+                            <input type="checkbox" id="paypal-payment" name="payment-method" value="paypal">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <button type="submit" class="site-btn" ${not empty sessionScope.cart.getListItems() ? "" : "disabled"}>PLACE ORDER</button>
+                      </div>
+                    </div>
+
+                  </div>
                 </form>
+
             </div>
         </div>
     </section>
