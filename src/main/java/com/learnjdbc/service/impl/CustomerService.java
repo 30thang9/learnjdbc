@@ -1,11 +1,8 @@
 package com.learnjdbc.service.impl;
 
 import com.learnjdbc.dao.ICustomerDAO;
-import com.learnjdbc.dao.ISupplierDAO;
 import com.learnjdbc.model.CustomerModel;
-import com.learnjdbc.model.SupplierModel;
 import com.learnjdbc.service.ICustomerService;
-import com.learnjdbc.service.ISupplierService;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -55,4 +52,6 @@ public class CustomerService implements ICustomerService {
     public List<CustomerModel> getByUsername(String username) {
         return customerDAO.getByUsername(username);
     }
+    @Override
+    public int getCount() {return customerDAO.getCount();}
 }

@@ -13,7 +13,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
     public Connection getConnection(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url="jdbc:mysql://localhost:3306/ogani3?useSSL=false";
+            String url="jdbc:mysql://localhost:3306/ogani4?useSSL=false";
             String user="root";
             String passWord="123456";
             return DriverManager.getConnection(url,user,passWord);

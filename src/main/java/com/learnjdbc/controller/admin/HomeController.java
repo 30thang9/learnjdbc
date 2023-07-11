@@ -1,8 +1,10 @@
 package com.learnjdbc.controller.admin;
 
 import com.learnjdbc.constant.SystemConstant;
+import com.learnjdbc.model.CustomerModel;
 import com.learnjdbc.model.ProductModel;
 import com.learnjdbc.model.statisticalmodel.RevenueModel;
+import com.learnjdbc.service.ICustomerService;
 import com.learnjdbc.service.IProductLotService;
 import com.learnjdbc.service.IProductService;
 import com.learnjdbc.service.IRevenueService;
@@ -26,6 +28,8 @@ public class HomeController extends HttpServlet {
     private IProductLotService productLotService;
     @Inject
     IRevenueService revenueService;
+    @Inject
+    ICustomerService customerService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,6 +40,9 @@ public class HomeController extends HttpServlet {
         revenueModel.setSumOnCurrentMonth(revenueService.getSumOnCurrentMonth());
         revenueModel.setSumOnCurrentDay(revenueService.getSumOnCurrentDay());
         req.setAttribute("revenue",revenueModel);
+        CustomerModel customerModel=new CustomerModel();
+        customerModel.setListResult(customerService.getAll());
+        req.setAttribute("customer",customerModel);
         RequestDispatcher requestDispatcher=req.getRequestDispatcher("/views/admin/home.jsp");
         requestDispatcher.forward(req,resp);
     }

@@ -104,6 +104,7 @@ CREATE TABLE Sale (
     saleDate TIMESTAMP,
     totalMoney DOUBLE,
     customerId BIGINT,
+    paymentMethod INT,
     FOREIGN KEY (customerId) REFERENCES Customer(id)
 );
 

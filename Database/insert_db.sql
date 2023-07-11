@@ -222,9 +222,18 @@ VALUES
 
 INSERT INTO ProductLot (productId, productionDate, expirationDate, quantity)
 VALUES
+(1, '2023-04-10 10:00:00', '2023-04-16 23:59:59', 100),
+(1, '2023-04-14 09:30:00', '2023-04-22 23:59:59', 150);
 (1, '2023-04-21 10:00:00', '2023-04-30 23:59:59', 100),
 (1, '2023-04-22 09:30:00', '2023-05-01 23:59:59', 150);
+(2, '2023-04-21 10:00:00', '2023-04-30 23:59:59', 100),
+(2, '2023-04-22 09:30:00', '2023-05-01 23:59:59', 150);
 
 INSERT INTO User (username, password, role)
 VALUES ('user', '123456', 0),
        ('admin', '123456', 1);
+
+insert into Customer (name,address,phone,email)
+values
+('Nguyen Ngoc Han','Ha Nam','0123456789','han@gmail.com');
+

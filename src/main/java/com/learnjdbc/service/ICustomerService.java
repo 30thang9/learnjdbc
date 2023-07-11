@@ -17,4 +17,6 @@ public interface ICustomerService {
 	CustomerModel getOne(long id);
 	List<CustomerModel> getByUsername(String username);
 	Long saveGetId(CustomerModel customerModel);
+
+    int getCount();
 }

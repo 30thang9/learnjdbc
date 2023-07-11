@@ -13,6 +13,17 @@
     Content body start
 ***********************************-->
 <div class="content-body" style="min-height: 924px;">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <ul class="list-inline d-flex align-items-center mb-2 mt-2 ml-4">
+            <li class="d-inline-block ml-3">Home</li>
+            <li class="d-inline-block ml-3 mr-3">/</li>
+            <li class="d-inline-block">Sale</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="container-fluid mt-3">
         <div class="row">
             <div class="col-lg-12">

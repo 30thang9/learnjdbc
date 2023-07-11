@@ -1,11 +1,8 @@
 package com.learnjdbc.dao.impl;
 
 import com.learnjdbc.dao.ICustomerDAO;
-import com.learnjdbc.dao.ISupplierDAO;
 import com.learnjdbc.mapper.CustomerMapper;
-import com.learnjdbc.mapper.SupplierMapper;
 import com.learnjdbc.model.CustomerModel;
-import com.learnjdbc.model.SupplierModel;
 
 import java.util.List;
 
@@ -77,6 +74,12 @@ public class CustomerDAO extends AbstractDAO<CustomerModel> implements ICustomer
             return insertGetId(query,customerModel.getName(),customerModel.getAddress(),customerModel.getPhone(),
                     customerModel.getEmail(),customerModel.getUsername());
         }
+    }
+
+    @Override
+    public int getCount() {
+        String sql = "select count(*) from Customer";
+        return count(sql);
     }
 
 }

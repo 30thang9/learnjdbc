@@ -13,4 +13,6 @@ public interface ICustomerDAO extends GenericDAO<CustomerModel>{
     List<CustomerModel> getAll();
     List<CustomerModel> getByUsername(String username);
     Long saveGetId(CustomerModel customerModel);
+
+    int getCount();
 }
